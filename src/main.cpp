@@ -39,7 +39,7 @@ char const version[] = "1.0.0";
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
-#define MAXLED 300 // MAX LEDs actives on strip
+#define MAXLED 1176 // MAX LEDs actives on strip
 
 #define PIN_LED D4   // R 500 ohms to DI pin for WS2812 and WS2813, for WS2813 BI pin of first LED to GND  ,  CAP 1000 uF to VCC 5v/GND,power supplie 5V 2A
 #define PIN_P1 D1    // switch player 1 to PIN and GND
@@ -51,7 +51,7 @@ char const version[] = "1.0.0";
 #define END_RAMP 100
 #define HIGH_RAMP 16
 
-IPAddress WLEDIP(192, 168, 5, 169);
+IPAddress WLEDIP(10, 16, 1, 90);
 bool ENABLE_RAMP = 0;
 bool VIEW_RAMP = 0;
 
