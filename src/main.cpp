@@ -39,7 +39,8 @@ char const version[] = "1.0.0";
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
-#define MAXLED 1176 // MAX LEDs actives on strip
+#define MAXLED 181 // MAX LEDs actives on strip
+#define PANELLEDS 1176
 
 #define PIN_LED D4   // R 500 ohms to DI pin for WS2812 and WS2813, for WS2813 BI pin of first LED to GND  ,  CAP 1000 uF to VCC 5v/GND,power supplie 5V 2A
 #define PIN_P1 D1    // switch player 1 to PIN and GND
@@ -51,6 +52,8 @@ char const version[] = "1.0.0";
 #define END_RAMP 100
 #define HIGH_RAMP 16
 
+
+
 IPAddress WLEDIP(10, 16, 1, 90);
 bool ENABLE_RAMP = 0;
 bool VIEW_RAMP = 0;
@@ -58,8 +61,9 @@ bool VIEW_RAMP = 0;
 int NPIXELS = MAXLED; // leds on track
 int cont_print = 0;
 
-#define COLOR1 Color(255, 0, 0)
-#define COLOR2 Color(0, 255, 0)
+#define COLOR1 Color(255, 0,   0)
+#define COLOR2 Color(0,   255, 0)
+#define COLOR0 Color(10,   10,   10)
 
 #define COLOR1_tail Color(i * 3, 0, 0)
 #define COLOR2_tail Color(0, i * 3, 0)
@@ -110,7 +114,7 @@ byte draworder = 0;
 
 unsigned long timestamp = 0;
 
-Adafruit_NeoPixel track = Adafruit_NeoPixel(MAXLED, WLEDIP);
+Adafruit_NeoPixel track = Adafruit_NeoPixel(PANELLEDS, WLEDIP);
 
 int tdelay = 5;
 
@@ -182,7 +186,7 @@ void setup()
     {
       for (int i = 0; i < NPIXELS; i++)
       {
-        track.setPixelColor(i, track.Color(0, 0, 0));
+        track.setPixelColor(i, track.COLOR0);
       };
       track.show();
       VIEW_RAMP = 0;
@@ -208,7 +212,7 @@ void start_race()
   send_race_phase(4); // Race phase 4: Countdown
   for (int i = 0; i < NPIXELS; i++)
   {
-    track.setPixelColor(i, track.Color(0, 0, 0));
+    track.setPixelColor(i, track.COLOR0);
   };
   track.show();
   delay(2000);
@@ -218,16 +222,16 @@ void start_race()
   tone(PIN_AUDIO, 400);
   delay(2000);
   noTone(PIN_AUDIO);
-  track.setPixelColor(12, track.Color(0, 0, 0));
-  track.setPixelColor(11, track.Color(0, 0, 0));
+  track.setPixelColor(12, track.COLOR0);
+  track.setPixelColor(11, track.COLOR0);
   track.setPixelColor(10, track.Color(255, 255, 0));
   track.setPixelColor(9, track.Color(255, 255, 0));
   track.show();
   tone(PIN_AUDIO, 600);
   delay(2000);
   noTone(PIN_AUDIO);
-  track.setPixelColor(9, track.Color(0, 0, 0));
-  track.setPixelColor(10, track.Color(0, 0, 0));
+  track.setPixelColor(9, track.COLOR0);
+  track.setPixelColor(10, track.COLOR0);
   track.setPixelColor(8, track.Color(255, 0, 0));
   track.setPixelColor(7, track.Color(255, 0, 0));
   track.show();
@@ -429,7 +433,7 @@ void loop()
 
   for (int i = 0; i < NPIXELS; i++)
   {
-    track.setPixelColor(i, track.Color(0, 0, 0));
+    track.setPixelColor(i, track.COLOR0);
   };
   if ((ENABLE_RAMP == 1) && (VIEW_RAMP == 1))
   {

@@ -185,7 +185,7 @@ void Adafruit_NeoPixel::updateLength(uint16_t n)
         numLEDs = n;
 
 #if defined(ESP8266) || (ESP32)
-        split = 600;
+        split = 882;
         packetcount = numBytes / split;
         if (numBytes % split > 0)
         {
@@ -200,7 +200,6 @@ void Adafruit_NeoPixel::updateLength(uint16_t n)
             packetloop--;
         }
 #endif
-
     }
     else
     {
@@ -3137,53 +3136,43 @@ void Adafruit_NeoPixel::show(void)
     }
     else
     {
-/*        uint16_t split = 600;
-        uint8_t packetcount = numBytes / split;
-        if (numBytes % split > 0)
+        if (lastpackettime + 50 < millis())
         {
-            packetcount++;
-        }
-
-        uint16_t lastpacketcount = (numBytes % split);
-
-        uint8_t packetloop = packetcount;
-        if (lastpacketcount > 0)
-        {
-            packetloop--;
-        }*/
-        for (int j = 0; j < packetloop; j++)
-        {
-            UDP.beginPacket(wledip, 65506);
-            UDP.write(0x9c);
-            UDP.write(0xda);
-            UDP.write((split) >> 8);
-            UDP.write((split) & 0xff);
-
-            UDP.write(j + 1);
-            UDP.write(packetcount);
-            for (int i = split * j; i < split * (j + 1); i++)
+            lastpackettime = millis();
+            for (int j = 0; j < packetloop; j++)
             {
-                UDP.write(pixels[i]);
-            }
-            UDP.write(0x36);
-            UDP.endPacket();
-        }
-        if (lastpacketcount > 0)
-        {
-            UDP.beginPacket(wledip, 65506);
-            UDP.write(0x9c);
-            UDP.write(0xda);
-            UDP.write(lastpacketcount >> 8);
-            UDP.write(lastpacketcount & 0xff);
+                UDP.beginPacket(wledip, 65506);
+                UDP.write(0x9c);
+                UDP.write(0xda);
+                UDP.write((split) >> 8);
+                UDP.write((split)&0xff);
 
-            UDP.write(packetcount);
-            UDP.write(packetcount);
-            for (int i = numBytes - lastpacketcount; i < numBytes; i++)
-            {
-                UDP.write(pixels[i]);
+                UDP.write(j + 1);
+                UDP.write(packetcount);
+                for (int i = split * j; i < split * (j + 1); i++)
+                {
+                    UDP.write(pixels[i]);
+                }
+                UDP.write(0x36);
+                UDP.endPacket();
             }
-            UDP.write(0x36);
-            UDP.endPacket();
+            if (lastpacketcount > 0)
+            {
+                UDP.beginPacket(wledip, 65506);
+                UDP.write(0x9c);
+                UDP.write(0xda);
+                UDP.write(lastpacketcount >> 8);
+                UDP.write(lastpacketcount & 0xff);
+
+                UDP.write(packetcount);
+                UDP.write(packetcount);
+                for (int i = numBytes - lastpacketcount; i < numBytes; i++)
+                {
+                    UDP.write(pixels[i]);
+                }
+                UDP.write(0x36);
+                UDP.endPacket();
+            }
         }
     }
 
@@ -3425,6 +3414,7 @@ void Adafruit_NeoPixel::setPixelColor(uint16_t n, uint8_t r, uint8_t g,
 */
 void Adafruit_NeoPixel::setPixelColor(uint16_t n, uint32_t c)
 {
+    n = racemap[n];
     if (n < numLEDs)
     {
         uint8_t *p, r = (uint8_t)(c >> 16), g = (uint8_t)(c >> 8), b = (uint8_t)c;

@@ -162,6 +162,8 @@ typedef uint8_t neoPixelType; ///< 3rd arg to Adafruit_NeoPixel constructor
 // because some boards may require oldschool compilers that don't
 // handle the C++11 constexpr keyword.
 
+static const uint racemap[181] = { 31,	32,	33,	34,	35,	36,	37,	38,	39,	40,	41,	42,	43,	44,	45,	46,	47,	48,	49,	50,	51,	52,	81,	110,	138,	166,	194,	222,	250,	278,	306,	334,	362,	390,	418,	446,	474,	502,	530,	558,	586,	614,	642,	670,	698,	726,	754,	782,	810,	838,	866,	894,	922,	950,	978,	1006,	1034,	1062,	1090,	1117,	1144,	1143,	1142,	1141,	1140,	1139,	1138,	1137,	1136,	1135,	1134,	1133,	1132,	1131,	1130,	1129,	1128,	1127,	1126,	1125,	1124,	1123,	1094,	1065,	1037,	1009,	981,	953,	925,	897,	869,	841,	813,	786,	759,	760,	761,	762,	763,	764,	765,	766,	767,	768,	769,	770,	771,	772,	773,	774,	775,	776,	777,	778,	751,	724,	696,	668,	640,	612,	584,	556,	528,	500,	472,	444,	416,	388,	360,	332,	303,	274,	273,	272,	271,	270,	269,	268,	267,	266,	293,	320,	348,	376,	404,	432,	460,	488,	516,	544,	572,	599,	626,	625,	624,	623,	622,	622,	621,	620,	619,	590,	561,	533,	505,	477,	449,	421,	393,	365,	337,	309,	281,	253,	225,	197,	169,	141,	113,	85,	58 };
+
 /* A PROGMEM (flash mem) table containing 8-bit unsigned sine wave (0-255).
    Copy & paste this snippet into a Python REPL to regenerate:
 import math
@@ -423,6 +425,7 @@ protected:
     uint8_t packetcount;
     uint16_t lastpacketcount;
     uint8_t packetloop;
+    uint32_t lastpackettime;
 #ifdef __AVR__
     volatile uint8_t *port; ///< Output PORT register
     uint8_t pinMask;        ///< Output PORT bitmask
